@@ -76,7 +76,7 @@ namespace LoLChatViewer.UI.Builders
                                 // Conseguir partes del mensaje
                                 time = " " + Seek.Timestamp(currentLine);
 
-                                type = "[" + Seek.MessageType(currentLine) + "]";
+                                type = Seek.MessageType(currentLine);
 
                                 user = Seek.User(currentLine);
 
@@ -113,7 +113,7 @@ namespace LoLChatViewer.UI.Builders
                                     FontSize = 15,
                                     HorizontalAlignment = HorizontalAlignment.Stretch,
                                     TextAlignment = TextAlignment.Center,
-                                    Width = 55,
+                                    Width = 80,
                                     TextWrapping = TextWrapping.WrapWithOverflow,
                                     Text = type
                                 };

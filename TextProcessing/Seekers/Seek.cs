@@ -18,25 +18,13 @@ namespace LoLChatViewer.TextProcessing.Seekers
 
             string messageType = "";
 
-            for (int i = words.Count; i > 0; i--) // Lee la lista de atras para adelante.
+            for (int i = words.Count - 1; i > 0; i--) // Lee la lista de atras para adelante.
             {
-                if (i != words.Count) // Ignorar ultima palabra.
+                if (words[i].Contains("color="))
                 {
-                    if (words[i].Contains("Team"))
-                    {
-                        messageType = "Team";
-                        break;
-                    }
-                    else if(words[i].Contains("All"))
-                    {
-                        messageType = "All";
-                        break;
-                    }
-                    else if (words[i].Contains("Party"))
-                    {
-                        messageType = "Party";
-                        break;
-                    }
+                    messageType = words[i].Substring(words[i].IndexOf('['));
+
+                    break;
                 }
             }
             return messageType;
