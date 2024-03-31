@@ -467,6 +467,8 @@ namespace LoLChatViewer
 
                                 if (oldClickedSP != null)
                                 {
+                                    oldClickedTB.FontWeight = FontWeights.Regular;
+                                    oldClickedTBTwo.FontWeight = FontWeights.Regular;
                                     Animate.Color(oldClickedSP, Animate.ColorProperty.Background, System.Windows.Media.Color.FromArgb(255, 0, 0, 0), quadratic, 250, 0);
                                     Animate.Color(oldClickedTB, Animate.ColorProperty.Foreground, System.Windows.Media.Color.FromArgb(255, 255, 255, 255), quadratic, 250, 0);
                                     Animate.Color(oldClickedTBTwo, Animate.ColorProperty.Foreground, System.Windows.Media.Color.FromArgb(255, 255, 255, 255), quadratic, 250, 0);
@@ -476,8 +478,10 @@ namespace LoLChatViewer
                                 oldClickedTB = currentTB;
                                 oldClickedTBTwo = currentSecondaryTB;
 
+                                currentTB.FontWeight = FontWeights.Bold;
+                                currentSecondaryTB.FontWeight = FontWeights.Bold;
                                 Animate.Color(currentSP, Animate.ColorProperty.Background, System.Windows.Media.Color.FromArgb(255, 255, 255, 255), quadratic, 100, 0);
-                                Animate.Color(currentTB, Animate.ColorProperty.Foreground, System.Windows.Media.Color.FromArgb(255, 10, 10, 10), quadratic, 100, 0);
+                                Animate.Color(currentTB, Animate.ColorProperty.Foreground, System.Windows.Media.Color.FromArgb(255, 0, 0, 0), quadratic, 100, 0);
                                 Animate.Color(currentSecondaryTB, Animate.ColorProperty.Foreground, System.Windows.Media.Color.FromArgb(255, 0, 0, 0), quadratic, 250, 0);
 
                                 string indexPosition = currentSP.Name.Substring(1);

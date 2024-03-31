@@ -87,6 +87,7 @@ namespace LoLChatViewer.UI.Builders
                             else
                             {
                                 time = " Time";
+
                                 type = "Type";
 
                                 user = "Username";

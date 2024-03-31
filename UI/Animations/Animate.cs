@@ -61,6 +61,17 @@ namespace LoLChatViewer.UI.Animations
                     currentColor = ((element as Shape)?.Stroke as SolidColorBrush)?.Color;
                 }
             }
+            else if (element is TextBlock) // We do a bit of hardcoding 🤏 :tf:
+            {
+                if (selectedProperty == ColorProperty.Background)
+                {
+                    currentColor = ((element as TextBlock).Background as SolidColorBrush)?.Color;
+                }
+                else if (selectedProperty == ColorProperty.Foreground)
+                {
+                    currentColor = ((element as TextBlock).Foreground as SolidColorBrush)?.Color;
+                }
+            }
 
             ColorAnimation colorAnim = new()
             {
@@ -75,10 +86,10 @@ namespace LoLChatViewer.UI.Animations
 
             if (element is Control)
             {
+                Control controlElement = element as Control;
+
                 if (selectedProperty == ColorProperty.Background)
                 {
-                    Control controlElement = element as Control;
-
                     if (controlElement != null)
                     {
                         controlElement.Background = brushAnimColor;
@@ -87,8 +98,6 @@ namespace LoLChatViewer.UI.Animations
                 }
                 else if (selectedProperty == ColorProperty.Foreground)
                 {
-                    Control controlElement = element as Control;
-
                     if (controlElement != null)
                     {
                         controlElement.Foreground = brushAnimColor;
@@ -97,8 +106,6 @@ namespace LoLChatViewer.UI.Animations
                 }
                 else if (selectedProperty == ColorProperty.BorderBrush)
                 {
-                    Control controlElement = element as Control;
-
                     if (controlElement != null)
                     {
                         controlElement.BorderBrush = brushAnimColor;
@@ -108,10 +115,10 @@ namespace LoLChatViewer.UI.Animations
             }
             else if (element is Panel)
             {
+                Panel panelElement = element as Panel;
+
                 if (selectedProperty == ColorProperty.Background)
                 {
-                    Panel panelElement = element as Panel;
-
                     if (panelElement != null)
                     {
                         panelElement.Background = brushAnimColor;
@@ -121,10 +128,10 @@ namespace LoLChatViewer.UI.Animations
             }
             else if (element is Shape)
             {
+                Shape shapeElement = element as Shape;
+
                 if (selectedProperty == ColorProperty.Fill)
                 {
-                    Shape shapeElement = element as Shape;
-
                     if (shapeElement != null)
                     {
                         shapeElement.Fill = brushAnimColor;
@@ -133,12 +140,31 @@ namespace LoLChatViewer.UI.Animations
                 }
                 else if (selectedProperty == ColorProperty.Stroke)
                 {
-                    Shape shapeElement = element as Shape;
-
                     if (shapeElement != null)
                     {
                         shapeElement.Stroke = brushAnimColor;
                         shapeElement.Stroke.BeginAnimation(SolidColorBrush.ColorProperty, colorAnim);
+                    }
+                }
+            }
+            else if (element is TextBlock)
+            {
+                TextBlock textBlockElement = element as TextBlock;
+
+                if (selectedProperty == ColorProperty.Background)
+                {
+                    if (textBlockElement != null)
+                    {
+                        textBlockElement.Background = brushAnimColor;
+                        textBlockElement.Background.BeginAnimation(SolidColorBrush.ColorProperty, colorAnim);
+                    }
+                }
+                else if (selectedProperty == ColorProperty.Foreground)
+                {
+                    if (textBlockElement != null)
+                    {
+                        textBlockElement.Foreground = brushAnimColor;
+                        textBlockElement.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, colorAnim);
                     }
                 }
             }
