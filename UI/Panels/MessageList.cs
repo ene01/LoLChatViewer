@@ -7,9 +7,9 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 
-namespace LoLChatViewer.UI.Builders
+namespace LoLChatViewer.UI.Panels
 {
-    public class MessageListBuilder
+    public class MessageList
     {
         private static QuadraticEase quadratic = new() // Usado en las animaciones.
         {
@@ -22,14 +22,14 @@ namespace LoLChatViewer.UI.Builders
             {
                 VerticalAlignment = VerticalAlignment.Stretch,
                 HorizontalAlignment = HorizontalAlignment.Stretch,
-                Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(40, 40, 40)),
+                Background = new SolidColorBrush(Color.FromRgb(54, 34, 54)),
             };
 
             ScrollViewer logScrollViewer = new ScrollViewer()
             {
                 VerticalAlignment = VerticalAlignment.Stretch,
                 HorizontalAlignment = HorizontalAlignment.Stretch,
-                Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(40, 40, 40)),
+                Background = new SolidColorBrush(Color.FromRgb(54, 34, 54)),
             };
 
             Read.FilePath = path;
@@ -67,7 +67,7 @@ namespace LoLChatViewer.UI.Builders
 
                             string msg;
 
-                            System.Windows.Media.Color tc = new();
+                            Color tc = new();
 
                             if (counter != -1)
                             {
@@ -95,7 +95,7 @@ namespace LoLChatViewer.UI.Builders
                                 msg = "Message";
                             }
 
-                            ChatViewer.dispatcher.Invoke(() =>
+                            ChatViewerWindow.dispatcher.Invoke(() =>
                             {
                                 // Crear TextBoxes
                                 TextBlock timeTB = new TextBlock
@@ -166,17 +166,17 @@ namespace LoLChatViewer.UI.Builders
                                 // Alternar el color de los fondos para que sea mas legible.
                                 if (alternateColor && counter != -1)
                                 {
-                                    msgGrid.Background = new SolidColorBrush(System.Windows.Media.Color.FromArgb(80, 0, 0, 0)); // Color 1
+                                    msgGrid.Background = new SolidColorBrush(Color.FromArgb(80, 0, 0, 0)); // Color 1
 
                                     alternateColor = !alternateColor;
                                 }
                                 else if (counter == -1)
                                 {
-                                    msgGrid.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0, 0, 0)); // Color de la primerra baarra que describe los valores
+                                    msgGrid.Background = new SolidColorBrush(Color.FromRgb(0, 0, 0)); // Color de la primerra baarra que describe los valores
                                 }
                                 else
                                 {
-                                    msgGrid.Background = new SolidColorBrush(System.Windows.Media.Color.FromArgb(10, 0, 0, 0)); // Color 2
+                                    msgGrid.Background = new SolidColorBrush(Color.FromArgb(10, 0, 0, 0)); // Color 2
 
                                     alternateColor = !alternateColor;
                                 }

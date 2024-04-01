@@ -7,11 +7,11 @@ namespace LoLChatViewer
     /// </summary>
     public partial class MainWindow : Window
     {
-        ChatViewer cv = new();
+        ChatViewerWindow cvw = new();
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            WindowGrid.Children.Add(cv.Start());
+            WindowGrid.Children.Add(cvw.Start());
         }
     }
 }
