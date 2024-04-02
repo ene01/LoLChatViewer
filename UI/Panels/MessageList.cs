@@ -9,7 +9,7 @@ using System.Windows.Media.Animation;
 
 namespace LoLChatViewer.UI.Panels
 {
-    public class MessageList
+    public class MessageList : LogViewerElements
     {
         private static QuadraticEase quadratic = new() // Usado en las animaciones.
         {
@@ -95,7 +95,7 @@ namespace LoLChatViewer.UI.Panels
                                 msg = "Message";
                             }
 
-                            ChatViewerWindow.dispatcher.Invoke(() =>
+                            Dispatcher.Invoke(() =>
                             {
                                 // Crear TextBoxes
                                 TextBlock timeTB = new TextBlock

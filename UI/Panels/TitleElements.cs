@@ -12,7 +12,7 @@ namespace LoLChatViewer.UI.Panels
     public class TitleElements
     {
         // Label fijo que se usa dentro del titleGrid.
-        public static Label titleLabel = new()
+        public Label titleLabel = new()
         {
             VerticalAlignment = VerticalAlignment.Top,
             HorizontalAlignment = HorizontalAlignment.Left,
@@ -24,14 +24,14 @@ namespace LoLChatViewer.UI.Panels
         };
 
         // Grid delgado posicionado arriba que solo muestra texto.
-        private static Grid titleHandler = new()
+        private Grid titleHandler = new()
         {
             VerticalAlignment = VerticalAlignment.Stretch,
             HorizontalAlignment = HorizontalAlignment.Stretch,
             IsHitTestVisible = true,
         };
 
-        public static Grid Show()
+        public Grid Show()
         {
             // Añadir labels.
             titleHandler.Children.Add(titleLabel);

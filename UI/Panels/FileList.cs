@@ -8,23 +8,23 @@ using System.Windows.Media.Animation;
 
 namespace LoLChatViewer.UI.Panels
 {
-    public class FileListBuilder : LogViewerElements
+    public class FileList : LogViewerElements
     {
         // Easing usado en las animaciones.
-        public static QuadraticEase quadratic = new()
+        public QuadraticEase quadratic = new()
         {
             EasingMode = EasingMode.EaseOut
         };
 
         // Grids temporales que se usan para almacenar informacion de cuales son los Grids apuntados y clickeados anteriormente, son usados para ayudar en las animaciones.
-        private static StackPanel oldHoveredSP = null, oldClickedSP = null;
+        private StackPanel oldHoveredSP = null, oldClickedSP = null;
 
         // Label temporal que se usa para almacenar informacion de cual es el Label clickeado anteriormente
         // no se nesesita saber cual fue apuntado anteriormente ya que los labels no cambian de color al apuntarlos.
-        private static TextBlock oldClickedTB = null, oldClickedTBTwo = null, oldHoveredTBTwo = null;
+        private TextBlock oldClickedTB = null, oldClickedTBTwo = null, oldHoveredTBTwo = null;
 
         // Lista de strings en donde se guardan las ubicaciones de los archivos 'r3dlog', este es el que despues es usado para saber que archivo se debe mostrar
-        private static List<string> files = new();
+        private List<string> files = new();
 
         // Recibe una ubicacion de una carpeta y retorna un ScrollViewer que contiene un StackPanel con mini StackPanels clickeables y animados con los nombres de cada archivo leido.
         //
@@ -39,7 +39,7 @@ namespace LoLChatViewer.UI.Panels
         // las extensiones del final en 'extensions'.
         //
         // Las extensiones deben ser especificados de esta forma: extensions = ".txt|.pdf|.jpeg|.cs".
-        public static ScrollViewer ShowFiles(string path, bool doStrictNameSearch, bool doSubDirectorySearch, string nameContains = "", string extensions = "")
+        public ScrollViewer ShowFiles(string path, bool doStrictNameSearch, bool doSubDirectorySearch, string nameContains = "", string extensions = "")
         {
             ScrollViewer fileScrollViewer = new ScrollViewer()
             {
@@ -65,7 +65,7 @@ namespace LoLChatViewer.UI.Panels
             Thread thread = new(() =>
             {
                 // Usar dispatcher de la aplicacion debido a que hacemos cambios a la UI.
-                ChatViewerWindow.dispatcher.Invoke(() =>
+                Dispatcher.Invoke(() =>
                 {
                     // Funcion local que busca los archivos del la ubicacion especificada en dPath (significa delegatePath).
                     void AddFiles(string dPath)
@@ -170,7 +170,7 @@ namespace LoLChatViewer.UI.Panels
                         }
 
                         // Evento que se ejecuta cuando el mouse sale del contenedor
-                        static void HoverAnimationLeave(object sender, MouseEventArgs e)
+                        void HoverAnimationLeave(object sender, MouseEventArgs e)
                         {
                             oldHoveredSP = null;
 
@@ -189,7 +189,7 @@ namespace LoLChatViewer.UI.Panels
                         }
 
                         // Evento que se ejecuta cuando el mouse entra al contenedor
-                        static void HoverAnimationEnter(object sender, MouseEventArgs e)
+                        void HoverAnimationEnter(object sender, MouseEventArgs e)
                         {
                             StackPanel currentSP = (StackPanel)sender;
 
@@ -212,7 +212,7 @@ namespace LoLChatViewer.UI.Panels
                         }
 
                         // Evento que se ejecuta cuando se hace click al contenedor
-                        static void ClickFile(object sender, MouseButtonEventArgs e)
+                        void ClickFile(object sender, MouseButtonEventArgs e)
                         {
                             StackPanel currentSP = (StackPanel)sender;
 
@@ -280,7 +280,7 @@ namespace LoLChatViewer.UI.Panels
         }
 
         // Quita la seleccion del elemento.
-        public static void DeselectFile()
+        public void DeselectFile()
         {
             if (oldClickedSP != null)
             {

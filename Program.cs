@@ -7,22 +7,28 @@ using System.Windows.Media;
 using LoLChatViewer.UI.Animations;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
-using NAudio.Wave;
 using LoLChatViewer.UI.Panels;
+using System.Diagnostics;
 
 namespace LoLChatViewer
 {
     public class ChatViewerWindow
     {
-        public static Dispatcher dispatcher = System.Windows.Application.Current.Dispatcher;
+        protected static Dispatcher Dispatcher = System.Windows.Application.Current.Dispatcher;
+
+        protected TitleElements TitleElements = new();
+
+        protected LogViewerElements LogViewerElements = new();
+
+        protected FileList FileList = new();
 
         // Ubicaciones de las carpetas que se usan, leagueFolderPath vendira siendo la carpeta League of Legends
         // leagueLogFolderPath es la ubicacion de la carpeta 'Logs' dentro de 'League of Legends'
         // y entireLeaguePath son esas dos de antes pero combinadas.
-        private static String lolFolderPath = Properties.Settings.Default.MainLeaguePath, r3dlogFolderPath = "\\Logs\\GameLogs", entireLoLPath = "";
+        private String lolFolderPath = Properties.Settings.Default.MainLeaguePath, r3dlogFolderPath = "\\Logs\\GameLogs", entireLoLPath = "";
 
         // Grid principal en el que se muestra todo el programa.
-        private static Grid mainGrid = new()
+        private Grid mainGrid = new()
         {
             VerticalAlignment = VerticalAlignment.Stretch,
             HorizontalAlignment = HorizontalAlignment.Stretch,
@@ -32,7 +38,7 @@ namespace LoLChatViewer
         };
 
         // Grid delgado posicionado arriba que solo muestra texto.
-        private static Grid topGrid = new()
+        private Grid topGrid = new()
         {
             VerticalAlignment = VerticalAlignment.Top,
             HorizontalAlignment = HorizontalAlignment.Stretch,
@@ -42,7 +48,7 @@ namespace LoLChatViewer
         };
 
         // Grid que contiene a fileGrid y logGrid, usado mas que nada para seprar un poco todo.
-        private static Grid bottomGrid = new Grid()
+        private Grid bottomGrid = new Grid()
         {
             VerticalAlignment = VerticalAlignment.Stretch,
             HorizontalAlignment = HorizontalAlignment.Stretch,
@@ -50,7 +56,7 @@ namespace LoLChatViewer
         };
 
         // Easing usado en las animaciones.
-        private static QuadraticEase quadratic = new()
+        private QuadraticEase quadratic = new()
         {
             EasingMode = EasingMode.EaseOut
         };
@@ -58,7 +64,7 @@ namespace LoLChatViewer
         // Inicio
         public Grid Start()
         {
-            if (lolFolderPath == "") // Vacio significa que es la primera vez que se inicia el prrograma.
+            if (lolFolderPath == "") // Si esto esta vacio significa que es la primera vez que se inicia el prrograma.
             {
                 if (Directory.Exists("C:\\Riot Games\\League of Legends")) // Si existe y tiene archivos adentro, entonces guardala como default y setearla para usarla en el momento.
                 {
@@ -98,7 +104,7 @@ namespace LoLChatViewer
         }
 
         // Mostrar select file dialog y checkear que la ubicacion es valida.
-        private static void PathCheck()
+        private void PathCheck()
         {
             OpenFolderDialog ofd = new()
             {
@@ -130,7 +136,7 @@ namespace LoLChatViewer
         }
 
         // Funcion especial que hace que puedas abrir un archivo especifico presionando la tecla 'L'
-        private static void SelectFileManually(object sender, KeyEventArgs e)
+        private void SelectFileManually(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.L)
             {
@@ -147,7 +153,7 @@ namespace LoLChatViewer
                     LogViewerElements.logGrid.Children.Clear();
                     LogViewerElements.logGrid.Children.Add(MessageList.ShowMessages(ofd.FileName));
                     LogViewerElements.pathLabel.Content = ofd.FileName;
-                    FileListBuilder.DeselectFile();
+                    FileList.DeselectFile();
                 }
             }
         }        

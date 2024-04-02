@@ -5,10 +5,10 @@ using System.Windows.Input;
 
 namespace LoLChatViewer.UI.Panels
 {
-    public class LogViewerElements
+    public class LogViewerElements : ChatViewerWindow
     {
         // Grid que se usa para acomodar el ScrollView que muestra los archivos leidos.
-        public static Grid fileGrid = new()
+        public Grid fileGrid = new()
         {
             VerticalAlignment = VerticalAlignment.Stretch,
             HorizontalAlignment = HorizontalAlignment.Left,
@@ -18,7 +18,7 @@ namespace LoLChatViewer.UI.Panels
             ClipToBounds = true
         };
 
-        public static TextBox searchBar = new()
+        public TextBox searchBar = new()
         {
             VerticalAlignment = VerticalAlignment.Top,
             HorizontalAlignment = HorizontalAlignment.Left,
@@ -30,7 +30,7 @@ namespace LoLChatViewer.UI.Panels
         };
 
         // Grid que se usa para acomodar el ScrollView que muestrra los mensajes del archivo elegido.
-        public static Grid logGrid = new()
+        public Grid logGrid = new()
         {
             VerticalAlignment = VerticalAlignment.Stretch,
             HorizontalAlignment = HorizontalAlignment.Stretch,
@@ -40,7 +40,7 @@ namespace LoLChatViewer.UI.Panels
         };
 
         // Label que muestra el 'Path' actual del archivo elegido a mostrar.
-        public static Label pathLabel = new()
+        public Label pathLabel = new()
         {
             VerticalAlignment = VerticalAlignment.Bottom,
             HorizontalAlignment = HorizontalAlignment.Stretch,
@@ -52,16 +52,16 @@ namespace LoLChatViewer.UI.Panels
         };
 
         // Grid que contiene a fileGrid y logGrid, usado mas que nada para seprar un poco todo.
-        private static Grid handlerGrid = new Grid()
+        protected Grid handlerGrid = new Grid()
         {
             VerticalAlignment = VerticalAlignment.Stretch,
             HorizontalAlignment = HorizontalAlignment.Stretch,
         };
 
-        public static Grid Show(string path)
+        public Grid Show(string path)
         {
             // Mostrar archivos 'r3dlog'
-            fileGrid.Children.Add(FileListBuilder.ShowFiles(path, false, true, "r3dlog", ".txt"));
+            fileGrid.Children.Add(FileList.ShowFiles(path, false, true, "r3dlog", ".txt"));
 
             // Añadir Grids de log y file.
             handlerGrid.Children.Add(logGrid);
@@ -106,7 +106,7 @@ namespace LoLChatViewer.UI.Panels
                 {
                     fileGrid.Children.Clear();
 
-                    fileGrid.Children.Add(FileListBuilder.ShowFiles(path, false, true, searchBar.Text, ".txt"));
+                    fileGrid.Children.Add(FileList.ShowFiles(path, false, true, searchBar.Text, ".txt"));
                 }
             }
 

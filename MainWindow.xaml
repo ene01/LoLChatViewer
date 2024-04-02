@@ -11,8 +11,5 @@
         Loaded="Window_Loaded"
         Background="#FF131313"
         WindowState="Maximized">
-    <Grid x:Name="WindowGrid">
-        <Grid x:Name="WindowGridTwo"
-              Margin="240,109,37,67" />
-    </Grid>
+    <Grid x:Name="WindowGrid" />
 </Window>
