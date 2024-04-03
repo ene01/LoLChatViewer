@@ -11,5 +11,7 @@
         Loaded="Window_Loaded"
         Background="#FF131313"
         WindowState="Maximized">
-    <Grid x:Name="WindowGrid" />
+    <Grid x:Name="WawaGrid">
+        <Grid x:Name="WindowGrid" />
+    </Grid>
 </Window>

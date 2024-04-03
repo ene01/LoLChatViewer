@@ -2,11 +2,14 @@
 using System.Windows.Media;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace LoLChatViewer.UI.Panels
 {
-    public class LogViewerElements : ChatViewerWindow
+    public class LogViewerElements
     {
+        public FileList FileList = new();
+
         // Grid que se usa para acomodar el ScrollView que muestra los archivos leidos.
         public Grid fileGrid = new()
         {
@@ -58,10 +61,10 @@ namespace LoLChatViewer.UI.Panels
             HorizontalAlignment = HorizontalAlignment.Stretch,
         };
 
-        public Grid Show(string path)
+        public void ShowIn(Dispatcher dispatcher, LogViewerElements logViewerElements, Panel element, string path)
         {
             // Mostrar archivos 'r3dlog'
-            fileGrid.Children.Add(FileList.ShowFiles(path, false, true, "r3dlog", ".txt"));
+            FileList.ShowFilesIn(dispatcher, logViewerElements, fileGrid, path, false, true, "r3dlog", ".txt");
 
             // Añadir Grids de log y file.
             handlerGrid.Children.Add(logGrid);
@@ -106,11 +109,11 @@ namespace LoLChatViewer.UI.Panels
                 {
                     fileGrid.Children.Clear();
 
-                    fileGrid.Children.Add(FileList.ShowFiles(path, false, true, searchBar.Text, ".txt"));
+                    FileList.ShowFilesIn(dispatcher, logViewerElements, fileGrid, path, false, true, searchBar.Text, ".txt");
                 }
             }
 
-            return handlerGrid;
+            element.Children.Add(handlerGrid);
         }
     }
 }

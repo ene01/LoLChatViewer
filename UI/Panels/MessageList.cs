@@ -6,17 +6,18 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Threading;
 
 namespace LoLChatViewer.UI.Panels
 {
-    public class MessageList : LogViewerElements
+    public static class MessageList
     {
         private static QuadraticEase quadratic = new() // Usado en las animaciones.
         {
             EasingMode = EasingMode.EaseOut
         };
 
-        public static ScrollViewer ShowMessages(string path)
+        public static void ShowMessages(Dispatcher dispatcher, Panel element, string path)
         {
             StackPanel logStackPanel = new StackPanel()
             {
@@ -95,7 +96,7 @@ namespace LoLChatViewer.UI.Panels
                                 msg = "Message";
                             }
 
-                            Dispatcher.Invoke(() =>
+                            dispatcher.Invoke(() =>
                             {
                                 // Crear TextBoxes
                                 TextBlock timeTB = new TextBlock
@@ -242,7 +243,8 @@ namespace LoLChatViewer.UI.Panels
 
             logScrollViewer.Content = logStackPanel;
 
-            return logScrollViewer;
+            element.Children.Clear();
+            element.Children.Add(logScrollViewer);
         }
     }
 }

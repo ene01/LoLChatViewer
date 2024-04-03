@@ -5,10 +5,11 @@ using System.Windows;
 using System.Windows.Input;
 using LoLChatViewer.UI.Animations;
 using System.Windows.Media.Animation;
+using System.Windows.Threading;
 
 namespace LoLChatViewer.UI.Panels
 {
-    public class FileList : LogViewerElements
+    public class FileList
     {
         // Easing usado en las animaciones.
         public QuadraticEase quadratic = new()
@@ -39,7 +40,7 @@ namespace LoLChatViewer.UI.Panels
         // las extensiones del final en 'extensions'.
         //
         // Las extensiones deben ser especificados de esta forma: extensions = ".txt|.pdf|.jpeg|.cs".
-        public ScrollViewer ShowFiles(string path, bool doStrictNameSearch, bool doSubDirectorySearch, string nameContains = "", string extensions = "")
+        public void ShowFilesIn(Dispatcher dispatcher, LogViewerElements logViewerElements, Panel element, string path, bool doStrictNameSearch, bool doSubDirectorySearch, string nameContains = "", string extensions = "")
         {
             ScrollViewer fileScrollViewer = new ScrollViewer()
             {
@@ -65,7 +66,7 @@ namespace LoLChatViewer.UI.Panels
             Thread thread = new(() =>
             {
                 // Usar dispatcher de la aplicacion debido a que hacemos cambios a la UI.
-                Dispatcher.Invoke(() =>
+                dispatcher.Invoke(() =>
                 {
                     // Funcion local que busca los archivos del la ubicacion especificada en dPath (significa delegatePath).
                     void AddFiles(string dPath)
@@ -169,18 +170,14 @@ namespace LoLChatViewer.UI.Panels
                             }
                         }
 
-                        // Evento que se ejecuta cuando el mouse sale del contenedor
+                        // Evento que se ejecuta cuando el mouse sale del contenedor.
                         void HoverAnimationLeave(object sender, MouseEventArgs e)
                         {
-                            oldHoveredSP = null;
-
-                            oldHoveredSP = null;
-
-                            StackPanel currentSP = (StackPanel)sender;
+                            StackPanel currentSP = (StackPanel)sender; // Conseguir a que elemento se apunto el mouse.
 
                             TextBlock currentSecondaryTB = (TextBlock)currentSP.Children[1];
 
-                            if (currentSP != oldClickedSP)
+                            if (currentSP != oldClickedSP) // No animar en caso de que el elemento este seleccionado.
                             {
                                 Animate.Color(currentSP, Animate.ColorProperty.Background, Color.FromArgb(255, 26, 18, 24), quadratic, 300, 0);
 
@@ -188,27 +185,18 @@ namespace LoLChatViewer.UI.Panels
                             }
                         }
 
-                        // Evento que se ejecuta cuando el mouse entra al contenedor
+                        // Evento que se ejecuta cuando el mouse entra al contenedor.
                         void HoverAnimationEnter(object sender, MouseEventArgs e)
                         {
                             StackPanel currentSP = (StackPanel)sender;
 
                             TextBlock currentSecondaryTB = (TextBlock)currentSP.Children[1];
 
-                            if (currentSP != oldClickedSP)
+                            if (currentSP != oldClickedSP) // No animar en caso de que el elemento este seleccionado.
                             {
-                                if (oldHoveredSP != null)
-                                {
-                                    Animate.Color(oldHoveredSP, Animate.ColorProperty.Background, Color.FromArgb(255, 26, 18, 24), quadratic, 100, 0);
-                                    Animate.Opacity(currentSecondaryTB, 0.6, quadratic, 250, 0);
-                                }
-
-                                oldHoveredSP = currentSP;
-                                oldHoveredTBTwo = currentSecondaryTB;
-
                                 Animate.Color(currentSP, Animate.ColorProperty.Background, Color.FromArgb(255, 66, 48, 62), quadratic, 100, 0);
                                 Animate.Opacity(currentSecondaryTB, 0.8, quadratic, 250, 0);
-                            }
+                            }   
                         }
 
                         // Evento que se ejecuta cuando se hace click al contenedor
@@ -216,13 +204,13 @@ namespace LoLChatViewer.UI.Panels
                         {
                             StackPanel currentSP = (StackPanel)sender;
 
-                            if (currentSP != oldClickedSP)
+                            if (currentSP != oldClickedSP) // Si el elemento al que le hiciste click ya estaba seleccionado, entonces no hacer nada para no repetir la aniamcion.
                             {
                                 TextBlock currentTB = (TextBlock)currentSP.Children[0];
 
                                 TextBlock currentSecondaryTB = (TextBlock)currentSP.Children[1];
 
-                                if (oldClickedSP != null)
+                                if (oldClickedSP != null) // Si habia ya un elemento seleccionado, deseleccionarlo, sino, no hacer nada.
                                 {
                                     oldClickedTB.FontWeight = FontWeights.Regular;
                                     oldClickedTBTwo.FontWeight = FontWeights.Regular;
@@ -230,10 +218,6 @@ namespace LoLChatViewer.UI.Panels
                                     Animate.Color(oldClickedTB, Animate.ColorProperty.Foreground, Color.FromArgb(255, 255, 255, 255), quadratic, 250, 0);
                                     Animate.Color(oldClickedTBTwo, Animate.ColorProperty.Foreground, Color.FromArgb(255, 255, 255, 255), quadratic, 250, 0);
                                 }
-
-                                oldClickedSP = currentSP;
-                                oldClickedTB = currentTB;
-                                oldClickedTBTwo = currentSecondaryTB;
 
                                 currentTB.FontWeight = FontWeights.Bold;
                                 currentSecondaryTB.FontWeight = FontWeights.Bold;
@@ -244,10 +228,14 @@ namespace LoLChatViewer.UI.Panels
                                 string indexPosition = currentSP.Name.Substring(1);
                                 string pathSelected = files[Convert.ToInt32(indexPosition)];
 
+                                // Los elementos que se animaron ahora pasan a ser los elementos 'viejos' ya seleccionados.
+                                oldClickedSP = currentSP;
+                                oldClickedTB = currentTB;
+                                oldClickedTBTwo = currentSecondaryTB;
+
                                 // A partir de aca es donde podes poner lo que sea que queres hacer con el path seleccionaado.
-                                logGrid.Children.Clear();
-                                logGrid.Children.Add(MessageList.ShowMessages(pathSelected));
-                                pathLabel.Content = pathSelected;
+                                MessageList.ShowMessages(dispatcher, logViewerElements.logGrid, pathSelected);
+                                logViewerElements.pathLabel.Content = pathSelected;
                             }
                         }
 
@@ -276,7 +264,7 @@ namespace LoLChatViewer.UI.Panels
 
             fileScrollViewer.Content = fileStackPanel;
 
-            return fileScrollViewer;
+            element.Children.Add(fileScrollViewer);
         }
 
         // Quita la seleccion del elemento.
@@ -284,8 +272,15 @@ namespace LoLChatViewer.UI.Panels
         {
             if (oldClickedSP != null)
             {
-                Animate.Color(oldClickedSP, Animate.ColorProperty.Background, Color.FromArgb(255, 0, 0, 0), quadratic, 250, 0);
+                oldClickedTB.FontWeight = FontWeights.Regular;
+                oldClickedTBTwo.FontWeight = FontWeights.Regular;
+                Animate.Color(oldClickedSP, Animate.ColorProperty.Background, Color.FromArgb(255, 26, 18, 24), quadratic, 250, 0);
                 Animate.Color(oldClickedTB, Animate.ColorProperty.Foreground, Color.FromArgb(255, 255, 255, 255), quadratic, 250, 0);
+                Animate.Color(oldClickedTBTwo, Animate.ColorProperty.Foreground, Color.FromArgb(255, 255, 255, 255), quadratic, 250, 0);
+
+                oldClickedSP = null;
+                oldClickedTB = null;
+                oldClickedTBTwo = null;
             }
         }
     }

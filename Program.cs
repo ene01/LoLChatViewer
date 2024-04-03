@@ -14,18 +14,16 @@ namespace LoLChatViewer
 {
     public class ChatViewerWindow
     {
-        protected static Dispatcher Dispatcher = System.Windows.Application.Current.Dispatcher;
+        private Dispatcher Dispatcher = System.Windows.Application.Current.Dispatcher;
 
-        protected TitleElements TitleElements = new();
+        private TitleElements TitleElements = new();
 
-        protected LogViewerElements LogViewerElements = new();
-
-        protected FileList FileList = new();
+        private LogViewerElements LogViewerElements = new();
 
         // Ubicaciones de las carpetas que se usan, leagueFolderPath vendira siendo la carpeta League of Legends
         // leagueLogFolderPath es la ubicacion de la carpeta 'Logs' dentro de 'League of Legends'
         // y entireLeaguePath son esas dos de antes pero combinadas.
-        private String lolFolderPath = Properties.Settings.Default.MainLeaguePath, r3dlogFolderPath = "\\Logs\\GameLogs", entireLoLPath = "";
+        private String lolFolderPath = Properties.Settings.Default.MainLeaguePath, r3dlogFolderPath = @"\Logs\GameLogs", entireLoLPath = "";
 
         // Grid principal en el que se muestra todo el programa.
         private Grid mainGrid = new()
@@ -66,11 +64,11 @@ namespace LoLChatViewer
         {
             if (lolFolderPath == "") // Si esto esta vacio significa que es la primera vez que se inicia el prrograma.
             {
-                if (Directory.Exists("C:\\Riot Games\\League of Legends")) // Si existe y tiene archivos adentro, entonces guardala como default y setearla para usarla en el momento.
+                if (Directory.Exists(@"C:\Riot Games\League of Legends")) // Si existe y tiene archivos adentro, entonces guardala como default y setearla para usarla en el momento.
                 {
-                    if (Directory.GetFiles("C:\\Riot Games\\League of Legends").Length > 0)
+                    if (Directory.GetFiles(@"C:\Riot Games\League of Legends").Length > 0)
                     {
-                        lolFolderPath = "C:\\Riot Games\\League of Legends";
+                        lolFolderPath = @"C:\Riot Games\League of Legends";
                         Properties.Settings.Default.MainLeaguePath = lolFolderPath;
                     }
                 }
@@ -85,8 +83,8 @@ namespace LoLChatViewer
             // Crear path completo.
             entireLoLPath = lolFolderPath + r3dlogFolderPath;
 
-            topGrid.Children.Add(TitleElements.Show());
-            bottomGrid.Children.Add(LogViewerElements.Show(entireLoLPath));
+            TitleElements.ShowIn(topGrid, "(v1.1) Hallo :D");
+            LogViewerElements.ShowIn(Dispatcher, LogViewerElements, bottomGrid, entireLoLPath);
 
             // Añadir todo el Grid principal
             mainGrid.Children.Add(topGrid);
@@ -150,10 +148,9 @@ namespace LoLChatViewer
 
                 if (result == true)
                 {
-                    LogViewerElements.logGrid.Children.Clear();
-                    LogViewerElements.logGrid.Children.Add(MessageList.ShowMessages(ofd.FileName));
+                    MessageList.ShowMessages(Dispatcher , LogViewerElements.logGrid, ofd.FileName);
                     LogViewerElements.pathLabel.Content = ofd.FileName;
-                    FileList.DeselectFile();
+                    LogViewerElements.FileList.DeselectFile();
                 }
             }
         }        
