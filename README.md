@@ -1,1 +1,1 @@
-Useless program to read chat logs from a 'r3dlog' file
+Useless program to read chat or ping log files in a nicer way.
